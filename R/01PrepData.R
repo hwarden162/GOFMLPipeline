@@ -93,4 +93,3 @@ full_data_train |>
 full_data_test |> 
   select(-starts_with("Area")) |> 
   write_csv("./data/spatial_data_test.csv")
-
