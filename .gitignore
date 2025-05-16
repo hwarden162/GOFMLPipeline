@@ -4,6 +4,8 @@
 .Ruserdata
 .DS_Store
 
+env/
+
 models/
 imagedata/
 data/
