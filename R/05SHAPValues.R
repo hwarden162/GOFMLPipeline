@@ -24,7 +24,7 @@ spatial_data_model <- readRDS("./models/spatial_data_model.rds")
 
 get_shap_vals <- function(data_recipe, data_train, data_test, data_model) {
   
-  X <- bake(data_recipe, data_test) |> 
+  X <- data_test |> 
     select(-GOF) |> 
     as.matrix()
   
