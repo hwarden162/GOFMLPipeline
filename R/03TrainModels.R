@@ -10,7 +10,7 @@ area_data_recipe <- readRDS("./models/area_data_recipe.rds")
 spatial_data_recipe <- readRDS("./models/spatial_data_recipe.rds")
 
 train_model <- function(data_train, data_recipe) {
-  data_folds <- vfold_cv(data_train, v=5, strata=GOF)
+  data_folds <- vfold_cv(data_train, v=5, repeats = 5, strata=GOF)
   
   rfrst_model <- rand_forest(
     mtry = tune(),
@@ -30,7 +30,7 @@ train_model <- function(data_train, data_recipe) {
   
   tuning_grid <- grid_regular(
     tuning_params,
-    levels = 5
+    levels = 20
   )
   
   data_model_tuning <- data_wf |> 

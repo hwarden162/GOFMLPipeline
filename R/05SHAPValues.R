@@ -23,10 +23,6 @@ area_data_model <- readRDS("./models/area_data_model.rds")
 spatial_data_model <- readRDS("./models/spatial_data_model.rds")
 
 get_shap_vals <- function(data_recipe, data_train, data_test, data_model) {
-  data_test <- data_test |> 
-    group_by(GOF) |> 
-    slice_sample(n=25) |> 
-    ungroup()
   
   X <- bake(data_recipe, data_test) |> 
     select(-GOF) |> 
@@ -42,7 +38,7 @@ get_shap_vals <- function(data_recipe, data_train, data_test, data_model) {
     X = X,
     pred_wrapper = predict_fn,
     newdata = X,
-    nsim = 200
+    nsim = 1000
   )
   
   baseline <- mean(predict_fn(data_model, newdata = data_train))
