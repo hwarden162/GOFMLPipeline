@@ -8,16 +8,19 @@ spatial_data_train <- read_csv("./data/spatial_data_train.csv")
 full_data_recipe <- recipe(GOF ~ ., data = full_data_train) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
+  step_normalize(all_numeric_predictors()) |> 
   prep()
 
 area_data_recipe <- recipe(GOF ~ ., data = area_data_train) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
+  step_normalize(all_numeric_predictors()) |> 
   prep()
 
 spatial_data_recipe <- recipe(GOF ~ ., data = spatial_data_train) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
+  step_normalize(all_numeric_predictors()) |> 
   prep()
 
 full_data_recipe |> 
