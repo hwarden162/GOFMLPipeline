@@ -3,6 +3,7 @@ library(fastshap)
 library(shapviz)
 library(tidymodels)
 library(tidyverse)
+library(stacks)
 
 registerDoParallel()
 
