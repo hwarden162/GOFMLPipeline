@@ -1,6 +1,7 @@
 library(caret)
 library(tidymodels)
 library(tidyverse)
+library(stacks)
 
 full_data_test <- read_csv("./data/full_data_test.csv")
 area_data_test <- read_csv("./data/area_data_test.csv")
@@ -11,8 +12,8 @@ area_data_model <- readRDS("./models/area_data_model.rds")
 spatial_data_model <- readRDS("./models/spatial_data_model.rds")
 
 make_confusion_mat <- function(data_test, data_model) {
-  model_preds <- full_data_model |> 
-    predict(full_data_test) |> 
+  model_preds <- data_model |> 
+    predict(data_test) |> 
     pull(.pred_class) |> 
     factor()
   
