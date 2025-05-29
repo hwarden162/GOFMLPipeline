@@ -174,7 +174,7 @@ get_mlps <- function(data_folds, data_recipe, ctrl_grid) {
 }
 
 train_model <- function(data_train, data_recipe) {
-  data_folds <- vfold_cv(data_train, v=5, repeats = 1, strata = Cancerous)
+  data_folds <- vfold_cv(data_train, v=5, repeats = 1, strata = GOF)
   
   ctrl_grid <- control_stack_grid()
   
