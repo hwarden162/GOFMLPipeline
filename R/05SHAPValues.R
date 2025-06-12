@@ -1,9 +1,11 @@
-library(doParallel)
-library(fastshap)
-library(shapviz)
-library(tidymodels)
-library(tidyverse)
-library(stacks)
+suppressMessages({
+  library(doParallel)
+  library(fastshap)
+  library(shapviz)
+  library(tidymodels)
+  library(tidyverse)
+  library(stacks)
+})
 
 NUMCLASSSAMPLES <- 400
 
@@ -13,9 +15,9 @@ full_data_recipe <- readRDS("./models/full_data_recipe.rds")
 area_data_recipe <- readRDS("./models/area_data_recipe.rds")
 spatial_data_recipe <- readRDS("./models/spatial_data_recipe.rds")
 
-full_data_train <- read_csv("./data/full_data_train.csv")
-area_data_train <- read_csv("./data/area_data_train.csv")
-spatial_data_train <- read_csv("./data/spatial_data_train.csv")
+full_data_train <- suppressMessages(read_csv("./data/full_data_train.csv"))
+area_data_train <- suppressMessages(read_csv("./data/area_data_train.csv"))
+spatial_data_train <- suppressMessages(read_csv("./data/spatial_data_train.csv"))
 
 full_data_test <- suppressMessages(read_csv("./data/full_data_test.csv")) |> 
   group_by(GOF) |> 

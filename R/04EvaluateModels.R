@@ -1,11 +1,13 @@
-library(caret)
-library(tidymodels)
-library(tidyverse)
-library(stacks)
+suppressMessages({
+  library(caret)
+  library(tidymodels)
+  library(tidyverse)
+  library(stacks)
+})
 
-full_data_test <- read_csv("./data/full_data_test.csv")
-area_data_test <- read_csv("./data/area_data_test.csv")
-spatial_data_test <- read_csv("./data/spatial_data_test.csv")
+full_data_test <- suppressMessages(read_csv("./data/full_data_test.csv"))
+area_data_test <- suppressMessages(read_csv("./data/area_data_test.csv"))
+spatial_data_test <- suppressMessages(read_csv("./data/spatial_data_test.csv"))
 
 full_data_model <- readRDS("./models/full_data_model.rds")
 area_data_model <- readRDS("./models/area_data_model.rds")

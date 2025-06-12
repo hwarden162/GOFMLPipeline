@@ -1,4 +1,7 @@
-library(tidyverse)
+suppressMessages({
+  library(tidymodels)
+  library(tidyverse)
+})
 
 ninewk_files <- c(
   "./imagedata/572_Kras_P53_9w_IHC_20210520_160048.ndpi",
@@ -10,8 +13,8 @@ ninewk_files <- c(
 )
 
 read_folder <- function(path, threshold) {
-  morph_data <- read_csv(paste0(path, "/morphology.csv"))
-  spat_data <- read_csv(paste0(path, "/spatial.csv"))
+  morph_data <- suppressMessages(read_csv(paste0(path, "/morphology.csv")))
+  spat_data <- suppressMessages(read_csv(paste0(path, "/spatial.csv")))
   morph_data |> 
     left_join(spat_data, by = "Meta_Global_Mask_Label") |> 
     rename_with(~ str_replace_all(., "-", "")) |> 
@@ -67,7 +70,8 @@ full_data_train <- full_data |>
 
 full_data_test <- full_data |> 
   filter(!Training) |> 
-  select(-Training, -ImagePath)
+  select(-Training, -ImagePath) |> 
+  initial_split(prop = 0.5, strata = GOF)
 
 full_data |> 
   write_csv("./data/full_data.csv")
@@ -76,6 +80,11 @@ full_data_train |>
   write_csv("./data/full_data_train.csv")
 
 full_data_test |> 
+  training() |> 
+  write_csv("./data/full_data_calibration.csv")
+
+full_data_test |> 
+  testing() |> 
   write_csv("./data/full_data_test.csv")
 
 full_data_train |> 
@@ -83,6 +92,12 @@ full_data_train |>
   write_csv("./data/area_data_train.csv")
 
 full_data_test |> 
+  training() |> 
+  select(-starts_with("Spatial")) |> 
+  write_csv("./data/area_data_calibration.csv")
+
+full_data_test |> 
+  testing() |> 
   select(-starts_with("Spatial")) |> 
   write_csv("./data/area_data_test.csv")
 
@@ -91,5 +106,11 @@ full_data_train |>
   write_csv("./data/spatial_data_train.csv")
 
 full_data_test |> 
+  training() |>
+  select(-starts_with("Area")) |> 
+  write_csv("./data/spatial_data_calibration.csv")
+
+full_data_test |> 
+  testing() |> 
   select(-starts_with("Area")) |> 
   write_csv("./data/spatial_data_test.csv")
