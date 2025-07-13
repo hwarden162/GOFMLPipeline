@@ -1,6 +1,7 @@
 suppressMessages({
   library(doParallel)
   library(fastshap)
+  library(logger)
   library(shapviz)
   library(tidymodels)
   library(tidyverse)
