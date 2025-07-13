@@ -3,16 +3,9 @@ suppressMessages({
   library(tidyverse)
 })
 
-ninewk_files <- c(
-  "./imagedata/572_Kras_P53_9w_IHC_20210520_160048.ndpi",
-  "./imagedata/572_Kras_P53_9w_IHC_20210520_160216.ndpi",
-  "./imagedata/572_Kras_P53_9w_IHC_20210520_160411.ndpi",
-  "./imagedata/657_Bcat_P53_9w_IHC_20211117_155258.ndpi",
-  "./imagedata/658_Bcat_P53_9w_IHC_20211117_160348.ndpi",
-  "./imagedata/659_Bcat_P53_9w_IHC_20211117_163154.ndpi"
-)
+ninewk_files <- list.dirs("./imagedata")[-1]
 
-read_folder <- function(path, threshold) {
+read_folder <- function(path, threshold = 3) {
   morph_data <- suppressMessages(read_csv(paste0(path, "/morphology.csv")))
   spat_data <- suppressMessages(read_csv(paste0(path, "/spatial.csv")))
   morph_data |> 
@@ -44,7 +37,7 @@ read_folder <- function(path, threshold) {
       GOF = str_match(path, "^[^_]*_([^_]*)_")[,2]
     ) |> 
     mutate(
-      Training = !(ImagePath %in% c("./imagedata/572_Kras_P53_9w_IHC_20210520_160411.ndpi", "./imagedata/657_Bcat_P53_9w_IHC_20211117_155258.ndpi"))
+      Training = str_detect(ImagePath, "658_Bcat_P53_9") | str_detect(ImagePath, "572_Kras_P53_9")
     ) |> 
     select(
       ImagePath,
@@ -56,12 +49,7 @@ read_folder <- function(path, threshold) {
 }
 
 full_data <- bind_rows(
-  read_folder(ninewk_files[1], 3),
-  read_folder(ninewk_files[2], 3),
-  read_folder(ninewk_files[3], 3),
-  read_folder(ninewk_files[4], 2.25),
-  read_folder(ninewk_files[5], 2.25),
-  read_folder(ninewk_files[6], 2.25)
+  map(ninewk_files, read_folder)
 )
 
 full_data_train <- full_data |> 
