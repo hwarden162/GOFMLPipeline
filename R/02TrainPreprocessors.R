@@ -23,14 +23,12 @@ full_data_recipe <- recipe(GOF ~ ., data = full_data_train) |>
   prep()
 
 area_data_recipe <- recipe(GOF ~ ., data = area_data_train) |> 
-  step_rm(ImagePath) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
   step_normalize(all_numeric_predictors()) |> 
   prep()
 
 spatial_data_recipe <- recipe(GOF ~ ., data = spatial_data_train) |> 
-  step_rm(ImagePath) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
   step_normalize(all_numeric_predictors()) |> 
