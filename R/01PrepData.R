@@ -1,6 +1,7 @@
 suppressMessages({
   library(tidymodels)
   library(tidyverse)
+  library(themis)
 })
 
 ninewk_files <- list.dirs("./imagedata")[-1]
@@ -18,6 +19,7 @@ read_folder <- function(path, threshold = 3) {
       Intensity_Cytoplasm_Secondary_MedianIntensity / Spatial_Object_Spatial_LocalMeansIntensityCytoplasmSecondaryMedianIntensity200 > threshold
     ) |> 
     select(
+      Meta_Global_Mask_Label,
       QC_Global_Mask_SegVal,
       starts_with("AreaShape_Nuclei"),
       starts_with("Spatial_Nuclei_Spatial_LocalCounts"),
@@ -33,14 +35,15 @@ read_folder <- function(path, threshold = 3) {
       -starts_with("AreaShape_Nuclei_Mask_InertiaTensorEigvals")
     ) |> 
     mutate(
-      ImagePath = path,
+      Meta_ImagePath = path,
       GOF = str_match(path, "^[^_]*_([^_]*)_")[,2]
     ) |> 
     mutate(
-      Training = str_detect(ImagePath, "658_Bcat_P53_9") | str_detect(ImagePath, "572_Kras_P53_9")
+      Training = str_detect(Meta_ImagePath, "658_Bcat_P53_9") | str_detect(Meta_ImagePath, "1024456_Kras_P53_21d_IHC")
     ) |> 
     select(
-      ImagePath,
+      Meta_Global_Mask_Label,
+      Meta_ImagePath,
       GOF,
       Training,
       starts_with("Area"),
@@ -54,11 +57,21 @@ full_data <- bind_rows(
 
 full_data_train <- full_data |> 
   filter(Training) |> 
-  select(-Training, -ImagePath)
+  select(-Training)
+
+full_data_train <- recipe(GOF ~ ., data = full_data_train) |> 
+  step_downsample(GOF) |> 
+  prep() |> 
+  juice()
 
 full_data_test <- full_data |> 
   filter(!Training) |> 
-  select(-Training, -ImagePath) |> 
+  select(-Training)
+
+full_data_test <- recipe(GOF ~ ., data = full_data_test) |> 
+  step_downsample(GOF) |> 
+  prep() |> 
+  juice() |> 
   initial_split(prop = 0.5, strata = GOF)
 
 full_data |> 

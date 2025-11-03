@@ -3,9 +3,18 @@ suppressMessages({
   library(tidyverse)
 })
 
-full_data_train <- suppressMessages(read_csv("./data/full_data_train.csv"))
-area_data_train <- suppressMessages(read_csv("./data/area_data_train.csv"))
-spatial_data_train <- suppressMessages(read_csv("./data/spatial_data_train.csv"))
+full_data_train <- suppressMessages(
+  read_csv("./data/full_data_train.csv") |> 
+    select(-starts_with("Meta_"))
+)
+area_data_train <- suppressMessages(
+  read_csv("./data/area_data_train.csv") |> 
+    select(-starts_with("Meta_"))
+)
+spatial_data_train <- suppressMessages(
+  read_csv("./data/spatial_data_train.csv") |> 
+    select(-starts_with("Meta_"))
+)
 
 full_data_recipe <- recipe(GOF ~ ., data = full_data_train) |> 
   step_zv(all_numeric_predictors()) |> 
@@ -14,12 +23,14 @@ full_data_recipe <- recipe(GOF ~ ., data = full_data_train) |>
   prep()
 
 area_data_recipe <- recipe(GOF ~ ., data = area_data_train) |> 
+  step_rm(ImagePath) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
   step_normalize(all_numeric_predictors()) |> 
   prep()
 
 spatial_data_recipe <- recipe(GOF ~ ., data = spatial_data_train) |> 
+  step_rm(ImagePath) |> 
   step_zv(all_numeric_predictors()) |> 
   step_nzv(all_numeric_predictors()) |> 
   step_normalize(all_numeric_predictors()) |> 

@@ -85,5 +85,5 @@ conformal_bands <- bind_rows(
   full_conf_preds |> mutate(from = "Full Data"),
   area_conf_preds |> mutate(from = "Morphology Data"),
   spat_conf_preds |> mutate(from = "Spatial Data")
-)
+) |> 
   write_csv("./data/conformal_bands.csv")
