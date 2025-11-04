@@ -21,6 +21,7 @@ read_folder <- function(path, threshold = 3) {
     select(
       Meta_Global_Mask_Label,
       QC_Global_Mask_SegVal,
+      starts_with("Meta_Nuclei_Mask_Centroid"),
       starts_with("AreaShape_Nuclei"),
       starts_with("Spatial_Nuclei_Spatial_LocalCounts"),
       starts_with("Spatial_Object_Spatial_LocalMeansAreaShapeNucleiMaskArea"),
@@ -44,6 +45,7 @@ read_folder <- function(path, threshold = 3) {
     select(
       Meta_Global_Mask_Label,
       Meta_ImagePath,
+      starts_with("Meta_Nuclei_Mask_Centroid"),
       GOF,
       Training,
       starts_with("Area"),
